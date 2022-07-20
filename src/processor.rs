@@ -15,7 +15,7 @@ use crate::custom_token::{
         create_account::create_account_command,
         create_token::create_token_command,
         mint::mint_command,
-        transfer::{transfer_command, TAX},
+        transfer::{transfer_command, TAX_FACTOR},
     },
     token::Token,
 };
@@ -91,7 +91,7 @@ pub fn process<'a>(
                 token_account.key,
                 from_account.key,
                 to_account.key,
-                TAX * 100f32,
+                TAX_FACTOR * 100f64,
             );
 
             transfer_command(token_account, from_account, to_account, amount)
