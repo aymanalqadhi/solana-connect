@@ -10,8 +10,8 @@ pub fn create_account_command(
     token_account: &AccountInfo,
     new_account: &AccountInfo,
 ) -> CustomTokenResult<()> {
-    if !token_account.is_signer {
-        return Err(CustomTokenError::UnsignedAccount(*token_account.key));
+    if !new_account.is_signer {
+        return Err(CustomTokenError::UnsignedAccount(*new_account.key));
     }
 
     AccountState::check_emptiness(new_account)?;
