@@ -7,7 +7,7 @@ use crate::custom_token::state::AccountState;
 use crate::custom_token::error::CustomTokenResult;
 
 /// 5% tax
-pub const TAX: f32 = 0.05;
+pub const TAX_FACTOR: f64 = 0.05;
 
 pub fn transfer_command(
     token_account: &AccountInfo,
@@ -29,15 +29,14 @@ pub fn transfer_command(
         return Err(CustomTokenError::InvalidAccountToken(*to_account.key));
     }
 
-    let tax = amount as f32 * TAX;
-    let total = amount + tax as u64;
+    let tax = (amount as f64 * TAX_FACTOR).floor() as u64;
 
-    if from.balance < total {
+    if from.balance < amount + tax {
         return Err(CustomTokenError::InsufficientBalance(*from_account.key));
     }
 
-    from.balance -= total;
-    to.balance += total;
+    from.balance -= amount + tax;
+    to.balance += amount;
 
     from.serialize_raw_into_account(from_account)?;
     to.serialize_raw_into_account(to_account)?;
